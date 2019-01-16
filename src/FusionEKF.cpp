@@ -79,7 +79,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       //         and initialize state.
       
       //placeholders to avoid repeat calculations
-      float rho, phi, rho_dot, cos_phi, sin_phi, px1, py1;
+      float rho, phi, rho_dot, cos_phi, sin_phi, px1, py1, vx1, vy1;
       rho = measurement_pack.raw_measurements_[0]; //initialize data type??
       phi = measurement_pack.raw_measurements_[1];
       rho_dot = measurement_pack.raw_measurements_[2];
@@ -87,10 +87,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       sin_phi = sin(phi);
       px1 = rho*cos_phi;
       py1 = rho*sin_phi;
-      vx = rho_dot*cos_phi; // can't do??
-      vy = rho_dot*sin_phi;
+      vx1 = rho_dot*cos_phi; // can't do??
+      vy1 = rho_dot*sin_phi;
       
-      ekf_.x_ << px1,py1,vx,vy;
+      ekf_.x_ << px1,py1,vx1,vy1;
 	
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
@@ -128,12 +128,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   float dt_4 = dt_3 * dt;
 
   // Modify the F matrix so that the time is integrated
-  kf_.F_(0, 2) = dt;
-  kf_.F_(1, 3) = dt;
+  ekf_.F_(0, 2) = dt;
+  ekf_.F_(1, 3) = dt;
 
   // set the process covariance matrix Q
-  kf_.Q_ = MatrixXd(4, 4);
-  kf_.Q_ <<  dt_4/4*noise_ax, 0, dt_3/2*noise_ax, 0,
+  ekf_.Q_ = MatrixXd(4, 4);
+  ekf_.Q_ <<  dt_4/4*noise_ax, 0, dt_3/2*noise_ax, 0,
          	 0, dt_4/4*noise_ay, 0, dt_3/2*noise_ay,
          	 dt_3/2*noise_ax, 0, dt_2*noise_ax, 0,
          	 0, dt_3/2*noise_ay, 0, dt_2*noise_ay;

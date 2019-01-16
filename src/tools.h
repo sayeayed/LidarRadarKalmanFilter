@@ -1,8 +1,12 @@
 #ifndef TOOLS_H_
 #define TOOLS_H_
 
+//#ifndef _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
+
 #include <vector>
 #include "Eigen/Dense"
+#include <math.h>
 
 class Tools {
  public:
