@@ -60,17 +60,8 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   //calculate y
   VectorXd y = z - z_pred;
   //nomalize phi between -pi and pi, in y
-  double pi = 3.14159265359;
-  if(abs(y(1))>pi){
-    while(y(1)>pi){
-      y(1) -= 2*pi;
-    }
-    while(y(1)<-pi){
-      y(1) += 2*pi;
-    }
-  }
-    
-  // H_ should already be initialized to Hj (for this project, in FusionEKF.cpp line 157)
+  y(1) = tools.Normpi(y(1));  
+  // H_ should already be initialized to Hj (for this project, in FusionEKF.cpp line 160)
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_; // HJ
   MatrixXd Si = S.inverse();

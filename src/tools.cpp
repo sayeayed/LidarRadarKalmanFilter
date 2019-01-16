@@ -95,3 +95,18 @@ VectorXd Tools::Cart2Polar(const VectorXd& x_state) {
   return z_p;
   
 }
+
+double Tools::Normpi(double y1){
+  //define pi to avoid including libraries
+  double pi = 3.14159265359;
+  //check that phi is outside of range [-pi,pi]
+  if(abs(y1)>pi){
+    while(y1>pi){
+      y1 -= 2*pi; //subtract 2pi if phi too large until it is within range
+    }
+    while(y1<-pi){
+      y1 += 2*pi; //add 2pi if phi too small
+    }
+  }
+  return y1;
+}

@@ -35,6 +35,11 @@ class Tools {
    * A helper method to convert from cartesian to polar coordinates
    */
   Eigen::VectorXd Cart2Polar(const Eigen::VectorXd& x_state);
+  
+    /**
+   * A helper method to normalize an angle between pi and -pi
+   */
+  double Normpi(double y1);
 };
 
 #endif  // TOOLS_H_
