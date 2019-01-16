@@ -58,15 +58,27 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   //use the h(x) function to map state estimation (Cartesian) to radar space (polar)
 //   VectorXd z_pred = tools.Cart2Polar(x_);
   VectorXd z_pred(3);
-  float px = x_(0);
-  float py = x_(1);
-  float vx = x_(2);
-  float vy = x_(3);
+  double px = x_(0);
+  double py = x_(1);
+  double vx = x_(2);
+  double vy = x_(3);
   //pre-compute a set of terms to avoid repeated calculation
-  float z1 = sqrt(px*px + py*py);
-  float z2 = atan2(py,px);
+  double z1 = sqrt(px*px + py*py);
+  double z2 = atan2(py,px);
   z_pred << z1,z2,(px*vx + py*vy)/z1;
+  //calculate y
   VectorXd y = z - z_pred;
+  //nomalize phi between -pi and pi, in y
+  double pi = 3.14156;
+  if(abs(y(1))>pi){
+    while(y(1)>pi){
+      y(1) -= 2*pi;
+    }
+    while(y(1)<-pi){
+      y(1) += 2*pi;
+    }
+  }
+    
   // H_ should already be initialized to Hj (for this project, in FusionEKF.cpp line 157)
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_; // HJ

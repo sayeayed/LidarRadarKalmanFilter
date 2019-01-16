@@ -81,7 +81,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       //         and initialize state.
       
       //placeholders to avoid repeat calculations
-      float rho, phi, cos_phi, sin_phi, px1, py1; //vx1, vy1;
+      double rho, phi, cos_phi, sin_phi, px1, py1; //vx1, vy1;
       rho = measurement_pack.raw_measurements_[0]; //initialize data type??
       phi = measurement_pack.raw_measurements_[1];
 //       rho_dot = measurement_pack.raw_measurements_[2];
@@ -119,15 +119,15 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    * TODO: Update the process noise covariance matrix.
    * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
    */
-  float noise_ax = 9;
-  float noise_ay = 9;
+  double noise_ax = 9;
+  double noise_ay = 9;
   
-  float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;
+  double dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;
   previous_timestamp_ = measurement_pack.timestamp_;
   
-  float dt_2 = dt * dt;
-  float dt_3 = dt_2 * dt;
-  float dt_4 = dt_3 * dt;
+  double dt_2 = dt * dt;
+  double dt_3 = dt_2 * dt;
+  double dt_4 = dt_3 * dt;
 
   // Modify the F matrix so that the time is integrated
   ekf_.F_(0, 2) = dt;
