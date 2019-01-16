@@ -1,6 +1,6 @@
 #include "tools.h"
 #include <iostream>
-#include <math.h>
+// #include <math.h>
 
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
@@ -81,7 +81,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 
   return Hj;
 }
-
+/*
 VectorXd Tools::Cart2Polar(const VectorXd& x_state) {
   VectorXd z_p(4);
   //recover state parameters
@@ -105,4 +105,5 @@ VectorXd Tools::Cart2Polar(const VectorXd& x_state) {
   
   z_p << z1,z2,(px*vx + py*vy)/z1;
   return z_p;
-}
+  
+}*/

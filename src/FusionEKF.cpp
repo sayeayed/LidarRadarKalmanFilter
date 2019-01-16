@@ -41,13 +41,15 @@ FusionEKF::FusionEKF() {
   H_laser_ << 1,0,0,0,
   			  0,1,0,0;
   
-  KalmanFilter ekf_;
+//   KalmanFilter ekf_;
+  ekf_.P_ = MatrixXd(4, 4);
+  ekf_.F_ = MatrixXd(4, 4);
   ekf_.P_ << 1,0,0,0,
   	   		 0,1,0,0,
   	   		 0,0,1000,0,
   	   		 0,0,0,1000;
-  ekf_.F_ << 1, 0, 1, 0,
-             0, 1, 0, 1,
+  ekf_.F_ << 1, 0, 0, 0,
+             0, 1, 0, 0,
              0, 0, 1, 0,
              0, 0, 0, 1;
 
@@ -79,18 +81,18 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       //         and initialize state.
       
       //placeholders to avoid repeat calculations
-      float rho, phi, rho_dot, cos_phi, sin_phi, px1, py1, vx1, vy1;
+      float rho, phi, cos_phi, sin_phi, px1, py1; //vx1, vy1;
       rho = measurement_pack.raw_measurements_[0]; //initialize data type??
       phi = measurement_pack.raw_measurements_[1];
-      rho_dot = measurement_pack.raw_measurements_[2];
+//       rho_dot = measurement_pack.raw_measurements_[2];
       cos_phi = cos(phi);
       sin_phi = sin(phi);
       px1 = rho*cos_phi;
       py1 = rho*sin_phi;
-      vx1 = rho_dot*cos_phi; // can't do??
-      vy1 = rho_dot*sin_phi;
+//       vx1 = rho_dot*cos_phi; // can't do??
+//       vy1 = rho_dot*sin_phi;
       
-      ekf_.x_ << px1,py1,vx1,vy1;
+      ekf_.x_ << px1,py1,0,0;//vx1,vy1;
 	
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
@@ -152,6 +154,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // TODO: Radar updates
+    ekf_.R_ = MatrixXd(3,3);
+    ekf_.H_ = MatrixXd(3,4);
     ekf_.R_ = R_radar_;
     Hj_ = tools.CalculateJacobian(ekf_.x_);
     ekf_.H_ = Hj_;
@@ -159,6 +163,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   } else {
     // TODO: Laser updates
+    ekf_.R_ = MatrixXd(2,2);
+    ekf_.H_ = MatrixXd(2,4);
     ekf_.R_ = R_laser_;
     ekf_.H_ = H_laser_;
     ekf_.Update(measurement_pack.raw_measurements_);

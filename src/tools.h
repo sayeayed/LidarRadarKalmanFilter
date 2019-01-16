@@ -6,7 +6,7 @@
 
 #include <vector>
 #include "Eigen/Dense"
-#include <math.h>
+// #include <math.h>
 
 class Tools {
  public:
@@ -34,7 +34,7 @@ class Tools {
   /**
    * A helper method to convert from cartesian to polar coordinates
    */
-  Eigen::VectorXd Cart2Polar(const Eigen::VectorXd& x_state);
+//   Eigen::VectorXd Cart2Polar(const Eigen::VectorXd& x_state);
 };
 
 #endif  // TOOLS_H_

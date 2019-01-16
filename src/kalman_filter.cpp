@@ -1,5 +1,5 @@
 #include "kalman_filter.h"
-#include "tools.h"
+// #include "tools.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -56,7 +56,16 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
    * TODO: update the state by using Extended Kalman Filter equations
    */
   //use the h(x) function to map state estimation (Cartesian) to radar space (polar)
-  VectorXd z_pred = tools.Cart2Polar(x_); 
+//   VectorXd z_pred = tools.Cart2Polar(x_);
+  VectorXd z_pred(3);
+  float px = x_(0);
+  float py = x_(1);
+  float vx = x_(2);
+  float vy = x_(3);
+  //pre-compute a set of terms to avoid repeated calculation
+  float z1 = sqrt(px*px + py*py);
+  float z2 = atan2(py,px);
+  z_pred << z1,z2,(px*vx + py*vy)/z1;
   VectorXd y = z - z_pred;
   // H_ should already be initialized to Hj (for this project, in FusionEKF.cpp line 157)
   MatrixXd Ht = H_.transpose();
