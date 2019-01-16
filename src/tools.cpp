@@ -14,9 +14,8 @@ Tools::~Tools() {}
 
 VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
                               const vector<VectorXd> &ground_truth) {
-  /**
-   * TODO: Calculate the RMSE here.
-   */
+// Calculates the Root Mean Square Error
+  
   // assuming state vector size of 4
     VectorXd rmse(4);
     rmse << 0,0,0,0;
@@ -49,10 +48,7 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
 }
 
 MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
-  /**
-   * TODO:
-   * Calculate a Jacobian here.
-   */
+// Calculates a Jacobian
   
   // assuming a state vector of length 4
   MatrixXd Hj(3,4);
@@ -70,7 +66,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
   // check division by zero
   if (fabs(c1) < 0.0001) {
     cout << "CalculateJacobian () - Error - Division by Zero" << endl;
-    // c1 = 0.0001;
+    // c1 = 0.001;
     return Hj;
   }
 
@@ -83,20 +79,28 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 }
 
 VectorXd Tools::Cart2Polar(const VectorXd& x_state) {
+// Converts cartesian coordinates to polar
+  
+  // initialize variables
   VectorXd z_p(3);
   double px = x_state(0);
   double py = x_state(1);
   double vx = x_state(2);
   double vy = x_state(3);
+  
   //pre-compute a set of terms to avoid repeated calculation
   double z1 = sqrt(px*px + py*py);
   double z2 = atan2(py,px);
+  
+  //perform conversion
   z_p << z1,z2,(px*vx + py*vy)/z1;
   return z_p;
   
 }
 
 double Tools::Normpi(double y1){
+// Normalizes an angle (phi) within [-pi,pi]
+  
   //define pi to avoid including libraries
   double pi = 3.14159265359;
   //check that phi is outside of range [-pi,pi]

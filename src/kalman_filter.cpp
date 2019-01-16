@@ -24,18 +24,14 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 }
 
 void KalmanFilter::Predict() {
-  /**
-   * TODO: predict the state
-   */
+// Predict the state
   x_ = F_ * x_;
   MatrixXd Ft = F_.transpose();
   P_ = F_ * P_ * Ft + Q_;
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
-  /**
-   * TODO: update the state by using Kalman Filter equations
-   */
+  // Update the state by using Kalman Filter equations
   VectorXd z_pred = H_ * x_;
   VectorXd y = z - z_pred;
   MatrixXd Ht = H_.transpose();
@@ -52,21 +48,19 @@ void KalmanFilter::Update(const VectorXd &z) {
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  /**
-   * TODO: update the state by using Extended Kalman Filter equations
-   */
+  // Update the state by using Extended Kalman Filter equations
   //use the h(x) function to map state estimation (Cartesian) to radar space (polar)
   VectorXd z_pred = tools.Cart2Polar(x_);
   //calculate y
   VectorXd y = z - z_pred;
   //nomalize phi between -pi and pi, in y
   y(1) = tools.Normpi(y(1));  
-  // H_ should already be initialized to Hj (for this project, in FusionEKF.cpp line 160)
+  // H_ should already be initialized to Hj (for this project, in FusionEKF.cpp line 139)
   MatrixXd Ht = H_.transpose();
-  MatrixXd S = H_ * P_ * Ht + R_; // HJ
+  MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
   MatrixXd PHt = P_ * Ht;
-  MatrixXd K = PHt * Si; // HJ
+  MatrixXd K = PHt * Si;
 
   //new estimate
   x_ = x_ + (K * y);

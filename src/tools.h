@@ -36,7 +36,7 @@ class Tools {
    */
   Eigen::VectorXd Cart2Polar(const Eigen::VectorXd& x_state);
   
-    /**
+   /**
    * A helper method to normalize an angle between pi and -pi
    */
   double Normpi(double y1);
