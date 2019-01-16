@@ -81,29 +81,17 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 
   return Hj;
 }
-/*
+
 VectorXd Tools::Cart2Polar(const VectorXd& x_state) {
-  VectorXd z_p(4);
-  //recover state parameters
-  float px = x_state(0);
-  float py = x_state(1);
-  float vx = x_state(2);
-  float vy = x_state(3);
+  VectorXd z_p(3);
+  double px = x_state(0);
+  double py = x_state(1);
+  double vx = x_state(2);
+  double vy = x_state(3);
   //pre-compute a set of terms to avoid repeated calculation
-  float z1 = sqrt(px*px + py*py);
-  float z2 = atan2(py,px);
-  //normalize angle between pi and -pi
-  if(z2>M_PI){
-    while(z2>M_PI){
-      z2 -= 2*M_PI;
-    }
-  } else if(z2<(-M_PI)){
-    while(z2<(-M_PI)){
-      z2 += 2*M_PI;
-    }
-  }
-  
+  double z1 = sqrt(px*px + py*py);
+  double z2 = atan2(py,px);
   z_p << z1,z2,(px*vx + py*vy)/z1;
   return z_p;
   
-}*/
+}
